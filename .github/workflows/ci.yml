@@ -65,5 +65,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          script: expect /home/roq/CRUD/deploy.exp
+          script: |
+              sudo apt-get update
+              sudo apt-get install -y expect
+              expect /home/roq/CRUD/deploy.exp
             
