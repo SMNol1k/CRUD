@@ -8,12 +8,16 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['id', 'title', 'description']
 
+
 class ProductPositionSerializer(serializers.ModelSerializer):
-    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+    product = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all()
+        )
 
     class Meta:
         model = StockProduct
         fields = ['product', 'quantity', 'price']
+
 
 class StockSerializer(serializers.ModelSerializer):
     positions = ProductPositionSerializer(many=True)
@@ -34,11 +38,17 @@ class StockSerializer(serializers.ModelSerializer):
         instance.address = validated_data.get('address', instance.address)
         instance.save()
         for position_data in positions_data:
-            StockProduct.objects.update_or_create(stock=instance, product=position_data['product'], defaults={'quantity': position_data['quantity'], 'price': position_data['price']})
+            StockProduct.objects.update_or_create(
+                stock=instance,
+                product=position_data['product'],
+                defaults={'quantity': position_data['quantity'],
+                          'price': position_data['price']})
         return instance
 
+
 class StockFilter(filters.FilterSet):
-    products = filters.NumberFilter(field_name='positions__product__id', distinct=True)
+    products = filters.NumberFilter(field_name='positions__product__id',
+                                    distinct=True)
 
     class Meta:
         model = Stock
