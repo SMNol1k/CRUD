@@ -1,7 +1,8 @@
 name: Testing
 
 on:
-  commit: [main]
+  pull_request: 
+    branches: [main]
 
 jobs:
   testing:
